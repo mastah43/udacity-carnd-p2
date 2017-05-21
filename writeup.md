@@ -1,11 +1,5 @@
 #**Traffic Sign Recognition** 
 
-##Writeup Template
-
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
-
 **Build a Traffic Sign Recognition Project**
 
 The goals / steps of this project are the following:
@@ -19,9 +13,8 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
+[image1]: ./examples/train_samples.jpg "Train Samples"
+[image2]: ./examples/train_class_distribution.png "Train Distribution by Class"
 [image4]: ./examples/placeholder.png "Traffic Sign 1"
 [image5]: ./examples/placeholder.png "Traffic Sign 2"
 [image6]: ./examples/placeholder.png "Traffic Sign 3"
@@ -36,7 +29,7 @@ The goals / steps of this project are the following:
 
 ####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
 
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+You're reading it! and here is a link to my [project code](https://github.com/mastah43/udacity-carnd-p2/blob/master/Traffic_Sign_Classifier.ipynb)
 
 ###Data Set Summary & Exploration
 
@@ -45,69 +38,85 @@ You're reading it! and here is a link to my [project code](https://github.com/ud
 I used the pandas library to calculate summary statistics of the traffic
 signs data set:
 
-* The size of training set is ?
-* The size of the validation set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
+* The size of training set is 34799 (without added augmented training samples)
+* The size of the validation set is 4410
+* The size of test set is 12630
+* The shape of a traffic sign image is (32, 32, 3) meaning a width of 32, height of 32 and 3 channels (RGB)
+* The number of unique classes/labels in the data set is 43
 
 ####2. Include an exploratory visualization of the dataset.
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+The following illustration shows one sample image per class of the training data set.
 
 ![alt text][image1]
+
+The following illustration shows the number of training images per class. 
+It is obvious that some classes like e.g. 0, 19 lack training samples 
+that we need to create synthetically through data augmentation.
+
+![alt text][image2]
 
 ###Design and Test a Model Architecture
 
 ####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-As a first step, I decided to convert the images to grayscale because ...
+I adopted to use the LeNet model with RGB images so I did not convert the images to grey scale.
+To limit the effects of varying contrasts in data set images I used contrast limited adaptive histogram equalization.
 
-Here is an example of a traffic sign image before and after grayscaling.
+I decided to generate additional data because the number of training images per class were strongly varying 
+as depicted in the visualization above.
+To add more data to the the data set, I used Keras to create additional training images that are randomly shifted, rotated, zoomed and sheared.
+This augmentation was applied since it reflects differences when taking photos of traffic sign images.
+For every class the augmentation makes sure that there are 50000 training samples.
+I also tried to add random gaussian noise but this lead to worse model accuracy.
 
-![alt text][image2]
+The difference between the original data set and the augmented data set is the size of the training images.
+Original training size is 34799 and augmented training size is 215000. 
 
-As a last step, I normalized the image data because ...
-
-I decided to generate additional data because ... 
-
-To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
-
-![alt text][image3]
-
-The difference between the original data set and the augmented data set is the following ... 
-
+Since image normalization and augmentation took some time to process 
+I added a mechanism for caching results in pickled files.
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-My final model consisted of the following layers:
+My final model consisted of the following layers. 
+This matches the LeNet architecture except having input 3 instead of 1 input channel 
+and having a final output size of 43:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | Input         		| 32x32x3 RGB image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
+| Normalization         | normalize channel values to have zero mean    |
+| Convolution 5x5     	| 1x1 stride, valid padding, outputs 28x28x6 	|
 | RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
- 
-
+| Max pooling	      	| 2x2 stride,  outputs 14x14x6 				    |
+| Convolution 5x5	    | 1x1 stride, valid padding, outputs 10x10x16   |
+| RELU					|												|
+| Max pooling	      	| 2x2 stride,  outputs 5x5x16 				    |
+| Flatten    	      	| convert 5x5x16 to 400               		    |
+| Fully connected		| output 120   									|
+| RELU					|												|
+| Fully connected		| output 84   									|
+| RELU					|												|
+| Fully connected		| output 43   									|
+| RELU					|												|
 
 ####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used an ....
+To train the model, I used:
+* learning rate: 0.001
+* batch size: 128
+* epochs: 10
+* optimizer: Adam optimizer for stochastic gradient descent
+
+I randomized the order of the training data set in every epoch to avoid effects of training data set order.
+
 
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of 0.99
+* validation set accuracy of 0.951
+* test set accuracy of 0.947
 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?

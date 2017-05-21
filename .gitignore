@@ -8,3 +8,4 @@ lenet.data*
 lenet.index
 lenet.meta*
 checkpoint
+.idea
