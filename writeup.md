@@ -13,13 +13,13 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/train_samples.jpg "Train Samples"
-[image2]: ./examples/train_class_distribution.png "Train Distribution by Class"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
+[image1]: ./visualization/train_samples.png "Train Samples"
+[image2]: ./visualization/train_class_distribution.png "Train Distribution by Class"
+[image4]: ./test_images/stopsign-32.png "Stop Sign"
+[image5]: ./test_images/noentry-32.png "No Entry Sign"
+[image6]: ./test_images/30kmh-32.png "30 km/h Sign"
+[image7]: ./test_images/70kmh-32.png "70 km/h Sign"
+[image8]: ./test_images/80kmh-32.png "80 km/h Sign"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -35,7 +35,7 @@ You're reading it! and here is a link to my [project code](https://github.com/ma
 
 ####1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
 
-I used the pandas library to calculate summary statistics of the traffic
+I used python standard library functions to calculate summary statistics of the traffic
 signs data set:
 
 * The size of training set is 34799 (without added augmented training samples)
@@ -115,6 +115,7 @@ I randomized the order of the training data set in every epoch to avoid effects 
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
+TBD
 * training set accuracy of 0.99
 * validation set accuracy of 0.951
 * test set accuracy of 0.947
@@ -139,31 +140,39 @@ TBD iterative: without drop out:
 * validation set accuracy of 0.949
 * test set accuracy of 0.937
 
-
-TBD iterative: with drop out 0.6
-
-
-
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
-TBD
+
+The validation set accuracy is similar to the training set accuracy (only slightly lower). 
+The test set accuracy is similar to the validation set accuracy (only slightly lower).
+This concludes that the model is slightly overfitted but the result is acceptable.
 
 Without drop out the training set accuracy was 0.99 and significantly higher than the validation accuracy (0.95). 
 With dropout the training set accuracy (0.966) is slightly higher than the validation set accuracy (0.949).
-Since training, validation and test set accuracy are similar the model appears not to have overfitted the training data.
-TBD grey scaling
+So without drop out the trained model was much more overfitted.
+
+I believe I could further improve the model by using greyscale to reduce to feature variety in the data set.
 
 ###Test a Model on New Images
 
 ####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-TODO download 5 images instead of using GTSRB
-I used images from the GTSRB data set of  TBD
-Here are five German traffic signs that I found on the web:
+I downloaded 5 images from the internet:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+![stop][image4] 
+The stop sign could be difficult to predict since the sign was shot from a non directly front facing angle.
 
-The first image might be difficult to classify because ...
+![no entry][image5] 
+The no entry sign should be good to predict since shot was front facing, contrast is good.
+
+![30 kmh][image6] 
+The 30 km/h should be bit harder to predict since there is another sign on the top visible and there are also some distracting forms in the background.
+
+![70 kmh][image7] 
+The 70 km/h should be bit harder to predict since there is another sign on the bottom visible and there are also some trees in the background.
+
+![80 kmh][image8]
+The 80 km/h should be good to predict since contrast is good due to the background beeing only light grey sky.
+
 
 ####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -171,17 +180,24 @@ Here are the results of the prediction:
 
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| Stop Sign      		| Stop Sign   									| 
+| No Entry     			| No entry 										|
+| 30 km/h				| 30 km/h										|
+| 70 km/h	      		| 70 km/h		    			 				|
+| 80 km/h			    | 80 km/h             							|
 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. 
+This is even higher to the test set accuracy of TBD. 
+
+I also other test images from the GTSRB data set which were much harder to predict on but my model performed 
+also quite well on them.
+
+TBD Compared to the GTSRB compares favorably to the accuracy on the test set of ...
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
+TBD
 The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
 
 For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
