@@ -106,6 +106,7 @@ To train the model, I used:
 * learning rate: 0.001
 * batch size: 128
 * epochs: 10
+* keep probability for the dropout on each layer: 0.7
 * optimizer: Adam optimizer for stochastic gradient descent
 
 I randomized the order of the training data set in every epoch to avoid effects of training data set order.
@@ -118,23 +119,45 @@ My final model results were:
 * validation set accuracy of 0.951
 * test set accuracy of 0.947
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+The LetNet model architecture was chosen. 
 
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
+Slight modifications were made to LeNet:
+* increase the number of input channels from 1 to 3 to handle RGB input
+* normalize each channel of each input pixels to have zero mean and equal value ranges 
+* change output layer size to 43 to match the number of traffic sign classes
+* add drop out for every layer to reduce overfitting
+
+The LeNet architecture was originally designed for classifying letters / characters.
+The relatively simple 2d shapes of german traffic signs are similar to to the shapes of arbitrary letters / characters. 
+
+TBD iterative: without drop out:
+* hyper parameters
+    * learning rate: 0.001
+    * batch size: 128
+    * epochs: 10
+* training set accuracy of 0.966
+* validation set accuracy of 0.949
+* test set accuracy of 0.937
+
+
+TBD iterative: with drop out 0.6
+
+
+
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
- 
+TBD
+
+Without drop out the training set accuracy was 0.99 and significantly higher than the validation accuracy (0.95). 
+With dropout the training set accuracy (0.966) is slightly higher than the validation set accuracy (0.949).
+Since training, validation and test set accuracy are similar the model appears not to have overfitted the training data.
+TBD grey scaling
 
 ###Test a Model on New Images
 
 ####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
+TODO download 5 images instead of using GTSRB
+I used images from the GTSRB data set of  TBD
 Here are five German traffic signs that I found on the web:
 
 ![alt text][image4] ![alt text][image5] ![alt text][image6] 
