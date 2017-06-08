@@ -11,7 +11,7 @@ Files
 -----
 The following files are contained:
 - [the jupyter notebook](Traffic_Sign_Classifier.ipynb)
-- [the output of the jupyter notebook] (Traffic_Sign_Classifier.html)
+- [the output of the jupyter notebook](Traffic_Sign_Classifier.html)
 - [the writeup](writeup.md)
 
 Running It

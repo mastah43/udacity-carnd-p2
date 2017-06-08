@@ -1,4 +1,4 @@
-#**Traffic Sign Recognition** 
+# **Traffic Sign Recognition**
 
 **Build a Traffic Sign Recognition Project**
 
@@ -20,20 +20,23 @@ The goals / steps of this project are the following:
 [image6]: ./test_images/30kmh-32.png "30 km/h Sign"
 [image7]: ./test_images/70kmh-32.png "70 km/h Sign"
 [image8]: ./test_images/80kmh-32.png "80 km/h Sign"
+[softmax]: ./visualization/test_images_softmax.png "Softmax Results"
+[feature_maps]: ./visualization/model_visualization.png "Feature Maps"
+
 
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
+### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.
 
 ---
-###Writeup / README
+### Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
+#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
 
 You're reading it! and here is a link to my [project code](https://github.com/mastah43/udacity-carnd-p2/blob/master/Traffic_Sign_Classifier.ipynb)
 
-###Data Set Summary & Exploration
+### Data Set Summary & Exploration
 
-####1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
+#### 1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
 
 I used python standard library functions to calculate summary statistics of the traffic
 signs data set:
@@ -44,7 +47,7 @@ signs data set:
 * The shape of a traffic sign image is (32, 32, 3) meaning a width of 32, height of 32 and 3 channels (RGB)
 * The number of unique classes/labels in the data set is 43
 
-####2. Include an exploratory visualization of the dataset.
+#### 2. Include an exploratory visualization of the dataset.
 
 The following illustration shows one sample image per class of the training data set.
 
@@ -56,27 +59,28 @@ that we need to create synthetically through data augmentation.
 
 ![alt text][image2]
 
-###Design and Test a Model Architecture
+### Design and Test a Model Architecture
 
-####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
+#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-I adopted to use the LeNet model with RGB images so I did not convert the images to grey scale.
+I used a modified LeNet model architecture with RGB images as input so I did not convert the images to grey scale.
 To limit the effects of varying contrasts in data set images I used contrast limited adaptive histogram equalization.
 
 I decided to generate additional data because the number of training images per class were strongly varying 
 as depicted in the visualization above.
 To add more data to the the data set, I used Keras to create additional training images that are randomly shifted, rotated, zoomed and sheared.
 This augmentation was applied since it reflects differences when taking photos of traffic sign images.
-For every class the augmentation makes sure that there are 50000 training samples.
-I also tried to add random gaussian noise but this lead to worse model accuracy.
+For every class the augmentation makes sure that there are 5.000 training samples.
+I also tried to add random gaussian noise but this lead to a worse model accuracy.
 
-The difference between the original data set and the augmented data set is the size of the training images.
+The difference between the original data set and the augmented data set
+is the size of the training images as well as the pixel equalization.
 Original training size is 34799 and augmented training size is 215000. 
 
 Since image normalization and augmentation took some time to process 
 I added a mechanism for caching results in pickled files.
 
-####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
+#### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
 My final model consisted of the following layers. 
 This matches the LeNet architecture except having input 3 instead of 1 input channel 
@@ -100,7 +104,7 @@ and having a final output size of 43:
 | Fully connected		| output 43   									|
 | RELU					|												|
 
-####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+#### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
 To train the model, I used:
 * learning rate: 0.001
@@ -112,13 +116,16 @@ To train the model, I used:
 I randomized the order of the training data set in every epoch to avoid effects of training data set order.
 
 
-####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+#### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-TBD
 * training set accuracy of 0.99
 * validation set accuracy of 0.951
 * test set accuracy of 0.947
+
+The validation set accuracy is similar to the training set accuracy (only slightly lower).
+The test set accuracy is similar to the validation set accuracy (only slightly lower).
+This concludes that the model is slightly overfitted but the result is acceptable.
 
 The LetNet model architecture was chosen. 
 
@@ -128,33 +135,23 @@ Slight modifications were made to LeNet:
 * change output layer size to 43 to match the number of traffic sign classes
 * add drop out for every layer to reduce overfitting
 
+Reason I used LeNet:
 The LeNet architecture was originally designed for classifying letters / characters.
-The relatively simple 2d shapes of german traffic signs are similar to to the shapes of arbitrary letters / characters. 
+The relatively simple 2d shapes of german traffic signs are similar to to the shapes of arbitrary letters / characters.
 
-TBD iterative: without drop out:
-* hyper parameters
-    * learning rate: 0.001
-    * batch size: 128
-    * epochs: 10
-* training set accuracy of 0.966
-* validation set accuracy of 0.949
-* test set accuracy of 0.937
+Without drop out I achieved the following results:
+* training set accuracy of 0.99
+* validation set accuracy of 0.951
+* test set accuracy of 0.947
 
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
-
-The validation set accuracy is similar to the training set accuracy (only slightly lower). 
-The test set accuracy is similar to the validation set accuracy (only slightly lower).
-This concludes that the model is slightly overfitted but the result is acceptable.
-
-Without drop out the training set accuracy was 0.99 and significantly higher than the validation accuracy (0.95). 
-With dropout the training set accuracy (0.966) is slightly higher than the validation set accuracy (0.949).
-So without drop out the trained model was much more overfitted.
+So without drop out the training produced a significantly overfitted model.
+This is why is used drop out to train the model.
 
 I believe I could further improve the model by using greyscale to reduce to feature variety in the data set.
 
-###Test a Model on New Images
+### Test a Model on New Images
 
-####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
 I downloaded 5 images from the internet:
 
@@ -174,7 +171,7 @@ The 70 km/h should be bit harder to predict since there is another sign on the b
 The 80 km/h should be good to predict since contrast is good due to the background beeing only light grey sky.
 
 
-####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
 Here are the results of the prediction:
 
@@ -186,34 +183,50 @@ Here are the results of the prediction:
 | 70 km/h	      		| 70 km/h		    			 				|
 | 80 km/h			    | 80 km/h             							|
 
-
-The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. 
-This is even higher to the test set accuracy of TBD. 
+The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%.
+This is higher then the test set accuracy of 0.947.
 
 I also other test images from the GTSRB data set which were much harder to predict on but my model performed 
 also quite well on them.
 
-TBD Compared to the GTSRB compares favorably to the accuracy on the test set of ...
+#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+The following image depicts the softmax outputs for each test image.
 
-TBD
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+For image 1 (stop sign) and image 2 (no entry sign) - the model was very certain on its correct prediction (nearly one).
+The quality of the images was good and shot from a front facing angle. Also those sign classes
+are very different to other sign classes in the data set and thus good to predict.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+For image 3 (30 km/h) the model was less sure on the correct prediction.
+The speed sign for 30 km/h looks similar to 50 km/h and that is
+what the models softmax outputs tell.
 
-| Probability         	|     Prediction	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+For image 4 (70 km/h) the model was very sure on the correct prediction.
+The digit 7 looks a bit similar to digit 2 so this is the reason for the
+model to list 20 km/h with the second highest although very low confidence.
 
+For image 5 (80 km/h) the model less sure on the correct prediction
+due to fact that 80 looks similar to 60 km/h.
 
-For the second image ... 
+To be more certain with speed sign prediction a specific model could
+be trained only using speed signs. This speed sign model could then
+be used if the confidence is not significant regarding multiple possible
+outputs of speed signs. I think that this speed sign model would then
+focus on features more distinguishing the different numbers on speed
+signs.
+
+![Softmax Results][softmax]
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
 
+In the last step of the [jupyter notebook](Traffic_Sign_Classifier.html) the results depicts the the feature maps of my model
+when predicting on the individual test images. The feature maps for layer 1 (convolution)
+and layer 2 (convolution) are shown.
+
+#### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+
+The feature maps from convolutional layer 1 show that the model uses the
+boundary and shape of the sign as features since those pixels triggered
+the activitation the most. For example, the no entry signs white horizontal
+bar was taken completely as features.
 
